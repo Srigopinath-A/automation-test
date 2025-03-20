@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create AWX Project</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Create AWX Project</h1>
+        <form id="projectForm">
+            <div class="form-group">
+                <label for="name">Project Name</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description">
+            </div>
+            <div class="form-group">
+                <label for="localPath">Local Path</label>
+                <input type="text" class="form-control" id="localPath">
+            </div>
+            <div class="form-group">
+                <label for="scmType">SCM Type</label>
+                <select class="form-control" id="scmType">
+                    <option value="">Manual</option>
+                    <option value="git">Git</option>
+                    <option value="svn">Subversion</option>
+                    <option value="insights">Red Hat Insights</option>
+                    <option value="archive">Remote Archive</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="scmUrl">SCM URL</label>
+                <input type="text" class="form-control" id="scmUrl">
+            </div>
+            <div class="form-group">
+                <label for="scmBranch">SCM Branch</label>
+                <input type="text" class="form-control" id="scmBranch">
+            </div>
+            <div class="form-group">
+                <label for="scmRefspec">SCM Refspec</label>
+                <input type="text" class="form-control" id="scmRefspec">
+            </div>
+            <div class="form-group">
+                <label for="scmClean">SCM Clean</label>
+                <input type="checkbox" id="scmClean">
+            </div>
+            <div class="form-group">
+                <label for="scmTrackSubmodules">SCM Track Submodules</label>
+                <input type="checkbox" id="scmTrackSubmodules">
+            </div>
+            <div class="form-group">
+                <label for="scmDeleteOnUpdate">SCM Delete on Update</label>
+                <input type="checkbox" id="scmDeleteOnUpdate">
+            </div>
+            <div class="form-group">
+                <label for="credential">Credential</label>
+                <input type="number" class="form-control" id="credential">
+            </div>
+            <div class="form-group">
+                <label for="timeout">Timeout</label>
+                <input type="number" class="form-control" id="timeout">
+            </div>
+            <div class="form-group">
+                <label for="organization">Organization</label>
+                <input type="number" class="form-control" id="organization">
+            </div>
+            <div class="form-group">
+                <label for="scmUpdateOnLaunch">SCM Update on Launch</label>
+                <input type="checkbox" id="scmUpdateOnLaunch">
+            </div>
+            <div class="form-group">
+                <label for="scmUpdateCacheTimeout">SCM Update Cache Timeout</label>
+                <input type="number" class="form-control" id="scmUpdateCacheTimeout">
+            </div>
+            <div class="form-group">
+                <label for="allowOverride">Allow Override</label>
+                <input type="checkbox" id="allowOverride">
+            </div>
+            <div class="form-group">
+                <label for="defaultEnvironment">Default Environment</label>
+                <input type="number" class="form-control" id="defaultEnvironment">
+            </div>
+            <div class="form-group">
+                <label for="signatureValidationCredential">Signature Validation Credential</label>
+                <input type="number" class="form-control" id="signatureValidationCredential">
+            </div>
+            <button type="submit" class="btn btn-primary">Create Project</button>
+        </form>
+        <div id="responseMessage" class="mt-3"></div>
+    </div>
+    <script>
+        document.getElementById('projectForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const project = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                localPath: document.getElementById('localPath').value,
+                scmType: document.getElementById('scmType').value,
+                scmUrl: document.getElementById('scmUrl').value,
+                scmBranch: document.getElementById('scmBranch').value,
+                scmRefspec: document.getElementById('scmRefspec').value,
+                scmClean: document.getElementById('scmClean').checked,
+                scmTrackSubmodules: document.getElementById('scmTrackSubmodules').checked,
+                scmDeleteOnUpdate: document.getElementById('scmDeleteOnUpdate').checked,
+                credential: document.getElementById('credential').value,
+                timeout: document.getElementById('timeout').value,
+                organization: document.getElementById('organization').value,
+                scmUpdateOnLaunch: document.getElementById('scmUpdateOnLaunch').checked,
+                scmUpdateCacheTimeout: document.getElementById('scmUpdateCacheTimeout').value,
+                allowOverride: document.getElementById('allowOverride').checked,
+                defaultEnvironment: document.getElementById('defaultEnvironment').value,
+                signatureValidationCredential: document.getElementById('signatureValidationCredential').value
+            };
+
+            fetch('/projects', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(project)
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('responseMessage').innerText = data;
+            })
+            .catch(error => {
+                document.getElementById('responseMessage').innerText = 'Error: ' + error;
+            });
+        });
+    </script>
+</body>
+</html>
